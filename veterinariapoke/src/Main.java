@@ -336,23 +336,32 @@ public class Main {
         historialEstados.add(historial15);
         String prueba = "prueba";
 
-        // mostrar los entrenadores con 3 o mas pokemones
+        // ------------------------------------------------------------
+        // Mostrar los entrenadores con 3 o más mascotas
+        // ------------------------------------------------------------
         clientes.stream().filter(cliente -> cliente.getMascotas().size() > 2).forEach(cliente -> {
             System.out.println(cliente.getNombre() + " es un entrenador crack!");
         });
-
         Scanner scanner = new Scanner(System.in);
-        //Detalla cuántas aplicaciones de medicamentos ha realizado cada veterinario durante un período determinado. Esencial
+
+        // ------------------------------------------------------------
+        // Reporte: Aplicaciones por veterinario en una fecha
+        // ------------------------------------------------------------
         System.out.print("Ingrese la fecha (yyyy-MM-dd): ");
         String fecha = scanner.nextLine();
         aplicaciones.stream().filter(aplicacion -> aplicacion.getFechaAplicacion().isEqual(LocalDate.parse(fecha, DateTimeFormatter.ofPattern("yyyy-MM-dd")))).collect(Collectors.groupingBy(aplicacion -> aplicacion.getEmpleado().getNombre(), Collectors.counting())).forEach((nombre, cantidad) -> System.out.println("Empleado: " + nombre + " aplicaciones: " + cantidad));
-        //Para una mascota seleccionada, muestra la evolución de sus estados. Esencial
+
+        // ------------------------------------------------------------
+        // Reporte: Historial de estados de una mascota
+        // ------------------------------------------------------------
         System.out.println("Identificacion de la mascota: ");
         int codmas = Integer.parseInt(scanner.nextLine());
         System.out.println("Historial de estados de " + historialEstados.stream().filter(HE -> HE.getMascota().getId() == codmas).map(HE -> HE.getMascota().getNombre()).findFirst().orElse("Mascota no encontrada"));
         historialEstados.stream().filter(HE -> HE.getMascota().getId() == codmas).sorted((h1, h2) -> h1.getFechaCambio().compareTo(h2.getFechaCambio())).forEach(HE -> System.out.println("Fecha: " + HE.getFechaCambio() + " Estado: " + HE.getEstado().getNombre()));
 
-        //Clientes con mas visitas medicas en el ultimo semestre. Esencial
+        // ------------------------------------------------------------
+        // Reporte: Clientes con más visitas médicas en el semestre anterior
+        // ------------------------------------------------------------
         LocalDate fechaReferencia = LocalDate.now();
         int mesActual = fechaReferencia.getMonthValue();
         int semestreActual = mesActual <= 6 ? 1 : 2;
@@ -363,10 +372,15 @@ public class Main {
             System.out.println("Cliente ID: " + clienteInfo.getKey() + ", Nombre: " + clienteInfo.getValue() + ", Cantidad de visitas medicas: " + cantidad);
         });
 
+        // ------------------------------------------------------------
+        // Reporte: Total de ventas por fecha
+        // ------------------------------------------------------------
         double total = aplicaciones.stream().filter(a -> a.getFechaAplicacion().equals(fecha)).mapToDouble(a -> a.getMedicamento().getPrecio()).sum();
-
         System.out.println("\nTotal de ventas para: " + fecha + total);
 
+        // ------------------------------------------------------------
+        // Reporte: Medicamento - Aplicaciones - Stock Usado
+        // ------------------------------------------------------------
         System.out.println("\nMedicamento          -  Aplicaciones  - Stock Usado");
         System.out.println("                                    ");
 
